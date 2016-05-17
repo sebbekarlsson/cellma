@@ -7,16 +7,18 @@ using namespace std;
 class Cell: public Instance {
     public:
         string character;
+        float r;
 
         Cell (float x, float y, string character) : Instance(x, y) {
             this->w = CELL_SIZE;
             this->h = CELL_SIZE;
             this->character = character;
+            this->r = 0.0f;
         }
 
         void draw(float delta) {
             glDisable(GL_TEXTURE_2D);
-            glColor3f(40.0/255.0f, 40.0/255.0f, 40.0/255.0f);
+            glColor3f(r/255.0f, 40.0/255.0f, 40.0/255.0f);
 
             glPushMatrix();
 
@@ -34,7 +36,7 @@ class Cell: public Instance {
             glPopMatrix();
 
             glPushMatrix();
-            glColor3f(1.0f, 1.0f, 1.0f);
+            glColor3f(r/255.0f, 1.0f, 1.0f);
             glTranslatef(this->x+CELL_SIZE/4, this->y+CELL_SIZE-4, 0.0f);
             glScalef(CELL_SIZE/186.0f, -(CELL_SIZE/186.0f), CELL_SIZE/186.0f);
 
