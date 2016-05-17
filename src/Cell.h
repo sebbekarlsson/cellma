@@ -16,7 +16,7 @@ class Cell: public Instance {
 
         void draw(float delta) {
             glDisable(GL_TEXTURE_2D);
-            glColor3f(1.0f, 1.0f, 1.0f);
+            glColor3f(40.0/255.0f, 40.0/255.0f, 40.0/255.0f);
 
             glPushMatrix();
 
@@ -34,9 +34,9 @@ class Cell: public Instance {
             glPopMatrix();
 
             glPushMatrix();
-            glColor3f(0.0f, 1.0f, 0.0f);
-            glTranslatef(this->x+4, this->y+(13), 0.0f);
-            glScalef(1/11.38, -(1/11.38), 1/11.38);
+            glColor3f(1.0f, 1.0f, 1.0f);
+            glTranslatef(this->x+CELL_SIZE/4, this->y+CELL_SIZE-4, 0.0f);
+            glScalef(CELL_SIZE/186.0f, -(CELL_SIZE/186.0f), CELL_SIZE/186.0f);
 
             for (auto c = this->character.begin(); c != this->character.end(); ++c)
             {

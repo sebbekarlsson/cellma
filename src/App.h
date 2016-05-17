@@ -1,10 +1,10 @@
 #include "Scene.h"
 
 
-const int CELL_SIZE = 16;
-const int WIDTH = 640;
+const int CELL_SIZE = 14;
+const int WIDTH = CELL_SIZE*80;
 const int HEIGHT = WIDTH / 16 * 9;
-const int SCALE = 2;
+const int SCALE = 1;
 
 SDL_Window* display = NULL;
 SDL_Renderer* renderer = NULL;

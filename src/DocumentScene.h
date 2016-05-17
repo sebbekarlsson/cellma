@@ -19,36 +19,25 @@ class DocumentScene: public Scene {
             this->w = 80;
             this->h = 80;
 
-            //cells.resize(w);
-
             fstream fin;
             fin.open("src/file.txt", ios::in);
 
             char my_character ;
-            int number_of_lines = 0;
             int xx = 0;
             int yy = 0;
 
             while (!fin.eof() ) {
-                cout << my_character << endl; // Or whatever
                 string sym(1, my_character); 
                 std::string str(sym.c_str());
                 cells.insert(cells.begin(), new Cell(xx*CELL_SIZE, yy*CELL_SIZE, str));
                 fin.get(my_character);
-                if (my_character == '\n'){
-                    ++number_of_lines;
+                
+                xx = xx+1;
+                if (my_character == '\n' || xx >= 80){
                     yy = yy+1;
                     xx = 0;
-                } else {
-                    xx = xx+1;
                 }
             }
-            cout << "NUMBER OF LINES: " << number_of_lines << endl;
-
-            //for (int xx = 0; xx < w; xx++) {
-            //    for(int yy = 0; yy < h; yy++) {
-            //                        }
-            //}
         }
 
         void draw(float delta) {
