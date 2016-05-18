@@ -56,7 +56,12 @@ class DocumentScene: public Scene {
         }
 
         void textEvent(string text) {
-            cells[cx][cy]->character = text; cx++;
+            cells[cx][cy]->character = text;
+            cells[cx][cy]->writeTimer = 10.0f;
+            cx++;
+        }
+
+        void keyUpEvent(SDL_Event e) {
         }
 
         void draw(float delta) {

@@ -8,8 +8,10 @@ class Cell: public Instance {
     public:
         string character;
         bool selected;
+        float writeTimer;
         float text_r, text_g, text_b;
         float border_r, border_g, border_b;
+        float write_r, write_g, write_b;
 
         Cell (float x, float y, string character) : Instance(x, y) {
             this->w = CELL_SIZE;
@@ -23,6 +25,12 @@ class Cell: public Instance {
             this->border_r = 40.0f;
             this->border_g = 40.0f;
             this->border_b = 40.0f;
+
+            this->write_r = rand() % 255 + 0;;
+            this->write_g = rand() % 255 + 0;;
+            this->write_b = rand() % 255 + 0;;
+
+            this->writeTimer = 0.0f;
         }
 
         void draw(float delta) {
@@ -31,18 +39,32 @@ class Cell: public Instance {
 
             glPushMatrix();
 
-            glTranslatef(this->x, this->y, 0.0f);
+            if (this->writeTimer > 0) {
+                glColor3f(write_r/255.0f, write_g/255.0f, write_b/255.0f);
+                glPushMatrix();
+                glTranslatef(this->x, this->y, 0.0f);
+
+                glBegin(GL_QUADS);
+
+                glVertex2f(0.0f, 0.0f);
+                glVertex2f(0.0f, this->h);
+                glVertex2f(this->w, this->h);
+                glVertex2f(this->w, 0.0f);
+                glVertex2f(0.0f, this->h);
+                
+                glEnd();
+                glPopMatrix();
+            }
+
+            glTranslatef(this->x, this->y, -0.1f);
 
             glBegin(GL_LINES);
 
-            //glVertex2f(0.0f, 0.0f);
             glVertex2f(0.0f, this->h);
             glVertex2f(this->w, this->h);
-            //glVertex2f(this->w, this->h);
-            //glVertex2f(0.0f, this->h);
             
             glEnd();
-
+            
             glPopMatrix();
 
             glPushMatrix();
@@ -69,6 +91,9 @@ class Cell: public Instance {
                 this->border_r = 40.0f;
                 this->border_g = 40.0f;
                 this->border_b = 40.0f; 
+            }
+            if (this->writeTimer > 0) {
+                this->writeTimer -= 1.0f;
             }
         }
 };

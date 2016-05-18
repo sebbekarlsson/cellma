@@ -31,4 +31,5 @@ class Scene {
         virtual void tick(float delta) = 0;
         virtual void draw(float delta) = 0;
         virtual void textEvent(string text) = 0;
+        virtual void keyUpEvent(SDL_Event e) = 0;
 };

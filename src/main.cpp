@@ -35,6 +35,9 @@ int main (int argc, char* args[]) {
             if (e.type == SDL_TEXTINPUT) {
                 app.textEvent(e.text.text);
             }
+            if (e.type == SDL_KEYUP) {
+                app.keyUpEvent(e);
+            }
             if (e.type == SDL_QUIT) {
                 app.quit = true;
             }

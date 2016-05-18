@@ -47,7 +47,7 @@ class App {
             glMatrixMode(GL_MODELVIEW);
 
             glDisable(GL_TEXTURE_2D);
-            glEnable(GL_DEPTH_TEST);
+            //glEnable(GL_DEPTH_TEST);
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_TEXTURE_2D);
@@ -158,6 +158,9 @@ class App {
             getCurrentScene()->textEvent(text);
         }
 
+        void keyUpEvent(SDL_Event &e) {
+            getCurrentScene()->keyUpEvent(e);
+        }
 
         Scene* getCurrentScene() {
             return scenes[sceneIndex];
