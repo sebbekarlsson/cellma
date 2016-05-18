@@ -112,8 +112,8 @@ class App {
             }
             
             int argc = 1;
-  char *argv[1] = {(char*)"Something"};
-  glutInit(&argc, argv);
+            char *argv[1] = {(char*)"Something"};
+            glutInit(&argc, argv);
 
             return success;
         }
@@ -152,6 +152,10 @@ class App {
             //glPushMatrix();
             //scene->camera->draw(delta);
             //glPopMatrix();
+        }
+
+        void textEvent(string text) {
+            getCurrentScene()->textEvent(text);
         }
 
 

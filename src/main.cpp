@@ -32,6 +32,9 @@ int main (int argc, char* args[]) {
         delta = (float) (newTime - oldTime) / 1000;
 
         while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_TEXTINPUT) {
+                app.textEvent(e.text.text);
+            }
             if (e.type == SDL_QUIT) {
                 app.quit = true;
             }
