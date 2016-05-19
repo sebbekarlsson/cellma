@@ -34,6 +34,10 @@ class Cell: public Instance {
         }
 
         void draw(float delta) {
+            this->text_r = 255.0f;
+            this->text_g = 255.0f;
+            this->text_b = 255.0f;
+
             glDisable(GL_TEXTURE_2D);
             glColor3f(border_r/255.0f, border_g/255.0f, border_b/255.0f);
 
@@ -54,6 +58,10 @@ class Cell: public Instance {
                 
                 glEnd();
                 glPopMatrix();
+
+                text_r = (255.0 - write_r);
+                text_g = (255.0 - write_g);
+                text_b = (255.0 - write_b);
             }
 
             glTranslatef(this->x, this->y, -0.1f);

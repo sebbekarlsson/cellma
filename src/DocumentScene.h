@@ -16,7 +16,7 @@ class DocumentScene: public Scene {
         SDL_Event event;
 
         DocumentScene () {
-            this->cx = -1;
+            this->cx = 0;
             this->cy = 0;
 
             for (int xx = 0; xx < sizeof(cells)/sizeof(*cells); xx++) {
