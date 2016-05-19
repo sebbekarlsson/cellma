@@ -16,7 +16,6 @@ class CellChunk {
         }
 
         void tick(float delta) {
-            cout << y << endl;
             for (int xx = 0; xx < sizeof(cells)/sizeof(*cells); xx++) {
                 for(int yy = 0; yy < sizeof(cells[xx])/sizeof(*cells[xx]); yy++) {
                     cells[xx][yy]->tick(delta);

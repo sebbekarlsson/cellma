@@ -2,6 +2,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <math.h>
+#include <algorithm>
 #include <vector>
 #include <memory>
 #include <list>

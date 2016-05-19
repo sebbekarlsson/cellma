@@ -37,9 +37,15 @@ class DocumentScene: public Scene {
             }
             if (state[SDL_SCANCODE_UP]) {
                 cy -= 1;
+
+                if (camera->dy > -124.0f)
+                camera->dy -= std::max(camera->y, (float)cy) - std::min(camera->y, (float)cy);
             }
             if (state[SDL_SCANCODE_DOWN]) {
                 cy += 1;
+
+                if (camera->dy < 124.0f)
+                camera->dy += std::max(camera->y, (float)cy) - std::min(camera->y, (float)cy);
             }
             if (state[SDL_SCANCODE_BACKSPACE]) {
                 cx -= 1;
@@ -49,12 +55,13 @@ class DocumentScene: public Scene {
                 cx = 0;
                 cy += 1;
             }
-            
+
             CellChunk *chunk;
             for (cellChunksIterator = this->cellChunks.begin() ; cellChunksIterator != this->cellChunks.end(); cellChunksIterator++) {
                 chunk = &**cellChunksIterator;
                 chunk->tick(delta);
             }
+            //this->getCurrentChunk()->tick(delta);
 
             for (int xx = 0; xx < sizeof(this->getCurrentChunk()->cells)/sizeof(*this->getCurrentChunk()->cells); xx++) {
                 for(int yy = 0; yy < sizeof(this->getCurrentChunk()->cells[xx])/sizeof(*this->getCurrentChunk()->cells[xx]); yy++) {
@@ -82,7 +89,8 @@ class DocumentScene: public Scene {
             for (cellChunksIterator = this->cellChunks.begin() ; cellChunksIterator != this->cellChunks.end(); cellChunksIterator++) {
                 chunk = &**cellChunksIterator;
                 chunk->draw(delta);
-            } 
+            }
+            //this->getCurrentChunk()->draw(delta); 
         }
 
         CellChunk * getCurrentChunk() {
