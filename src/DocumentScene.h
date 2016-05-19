@@ -1,37 +1,33 @@
 #include "Scene.h"
 #include "Cell.h"
+#include "CellChunk.h"
 #include <string>
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
 
 extern const int CELL_SIZE;
+extern const int CELLCHUNK_HEIGHT;
 const Uint8 *state = SDL_GetKeyboardState(NULL);
 using namespace std;
 class DocumentScene: public Scene {
     public:
         int cx;
         int cy;
-        Cell* cells[80][300];
+        std::vector<CellChunk*> cellChunks;
+        std::vector<CellChunk*>::iterator cellChunksIterator;
         SDL_Event event;
 
         DocumentScene () {
             this->cx = 0;
             this->cy = 0;
 
-            for (int xx = 0; xx < sizeof(cells)/sizeof(*cells); xx++) {
-                for(int yy = 0; yy < sizeof(cells[xx])/sizeof(*cells[xx]); yy++) {
-                    cells[xx][yy] = new Cell((xx*CELL_SIZE), (yy*CELL_SIZE), (string)"");
-                }
+            for (int yy = 0; yy < 4; yy++) {
+                this->cellChunks.push_back(new CellChunk(0, (yy*CELL_SIZE)*CELLCHUNK_HEIGHT));
             }
         }
 
         void tick(float delta) {
-            for (int xx = 0; xx < sizeof(cells)/sizeof(*cells); xx++) {
-                for(int yy = 0; yy < sizeof(cells[xx])/sizeof(*cells[xx]); yy++) {
-                    cells[xx][yy]->tick(delta);
-                }
-            }
             camera->tick(delta);
             if (state[SDL_SCANCODE_LEFT]) {
                 cx -= 1;
@@ -47,17 +43,34 @@ class DocumentScene: public Scene {
             }
             if (state[SDL_SCANCODE_BACKSPACE]) {
                 cx -= 1;
-                cells[cx][cy]->character = "";
+                this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = "";
             }
             if (state[SDL_SCANCODE_RETURN]) {
                 cx = 0;
                 cy += 1;
             }
+            
+            CellChunk *chunk;
+            for (cellChunksIterator = this->cellChunks.begin() ; cellChunksIterator != this->cellChunks.end(); cellChunksIterator++) {
+                chunk = &**cellChunksIterator;
+                chunk->tick(delta);
+            }
+
+            for (int xx = 0; xx < sizeof(this->getCurrentChunk()->cells)/sizeof(*this->getCurrentChunk()->cells); xx++) {
+                for(int yy = 0; yy < sizeof(this->getCurrentChunk()->cells[xx])/sizeof(*this->getCurrentChunk()->cells[xx]); yy++) {
+                    if (cx == xx && (cy % CELLCHUNK_HEIGHT) == yy) {
+                        
+                        this->getCurrentChunk()->cells[xx][yy]->selected = true;
+                    } else {
+                        this->getCurrentChunk()->cells[xx][yy]->selected = false;
+                    }
+                }
+            }
         }
 
         void textEvent(string text) {
-            cells[cx][cy]->character = text;
-            cells[cx][cy]->writeTimer = 10.0f;
+            this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = text;
+            this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->writeTimer = 10.0f;
             cx++;
         }
 
@@ -65,16 +78,15 @@ class DocumentScene: public Scene {
         }
 
         void draw(float delta) {
-            for (int xx = 0; xx < sizeof(cells)/sizeof(*cells); xx++) {
-                for(int yy = 0; yy < sizeof(cells[xx])/sizeof(*cells[xx]); yy++) {
-                    if (cx == xx && cy == yy) {
-                        cells[xx][yy]->selected = true;
-                    } else {
-                        cells[xx][yy]->selected = false;
-                    }
-                    cells[xx][yy]->draw(delta);
-                }
-            }
+            CellChunk *chunk;
+            for (cellChunksIterator = this->cellChunks.begin() ; cellChunksIterator != this->cellChunks.end(); cellChunksIterator++) {
+                chunk = &**cellChunksIterator;
+                chunk->draw(delta);
+            } 
+        }
+
+        CellChunk * getCurrentChunk() {
+            return cellChunks[(cy / CELLCHUNK_HEIGHT) % 4];
         }
 
         void initialize(float delta) {

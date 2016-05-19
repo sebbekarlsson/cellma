@@ -2,6 +2,7 @@
 
 
 const int CELL_SIZE = 14;
+const int CELLCHUNK_HEIGHT = 16;
 const int WIDTH = CELL_SIZE*80;
 const int HEIGHT = WIDTH / 16 * 9;
 const int SCALE = 1;
