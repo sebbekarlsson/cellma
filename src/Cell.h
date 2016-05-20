@@ -103,5 +103,6 @@ class Cell: public Instance {
             if (this->writeTimer > 0) {
                 this->writeTimer -= 1.0f;
             }
+            this->selected = false;
         }
 };

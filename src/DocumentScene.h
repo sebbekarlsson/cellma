@@ -66,10 +66,7 @@ class DocumentScene: public Scene {
             for (int xx = 0; xx < sizeof(this->getCurrentChunk()->cells)/sizeof(*this->getCurrentChunk()->cells); xx++) {
                 for(int yy = 0; yy < sizeof(this->getCurrentChunk()->cells[xx])/sizeof(*this->getCurrentChunk()->cells[xx]); yy++) {
                     if (cx == xx && (cy % CELLCHUNK_HEIGHT) == yy) {
-                        
                         this->getCurrentChunk()->cells[xx][yy]->selected = true;
-                    } else {
-                        this->getCurrentChunk()->cells[xx][yy]->selected = false;
                     }
                 }
             }

@@ -4,3 +4,4 @@
 *.swm
 *.out
 *vgcore*
+*.dSYM
