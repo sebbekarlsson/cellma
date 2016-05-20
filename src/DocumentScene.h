@@ -38,15 +38,24 @@ class DocumentScene: public Scene {
             if (state[SDL_SCANCODE_UP]) {
                 cy -= 1;
 
-                if (camera->dy > -124.0f)
-                camera->dy -= std::max(camera->y, (float)cy) - std::min(camera->y, (float)cy);
+                //if (camera->dy > -124.0f)
+                //camera->dy -= std::max(camera->y, (float)cy) - std::min(camera->y, (float)cy);
             }
             if (state[SDL_SCANCODE_DOWN]) {
                 cy += 1;
 
-                if (camera->dy < 124.0f)
-                camera->dy += std::max(camera->y, (float)cy) - std::min(camera->y, (float)cy);
+                //if (camera->dy < 124.0f)
+                //camera->dy += std::max(camera->y, (float)cy) - std::min(camera->y, (float)cy);
             }
+
+            if (camera->y < (cy*CELL_SIZE)-((HEIGHT*SCALE)/2)) {
+                camera->dy += 3.5f;
+            }
+
+            if (camera->y > (cy*CELL_SIZE)-((HEIGHT*SCALE)/2)) {
+                camera->dy -= 3.5f;
+            }
+
             if (state[SDL_SCANCODE_BACKSPACE]) {
                 cx -= 1;
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = "";
