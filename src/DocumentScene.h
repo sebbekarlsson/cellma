@@ -14,6 +14,7 @@ class DocumentScene: public Scene {
     public:
         int cx;
         int cy;
+        bool latch;
         std::vector<CellChunk*> cellChunks;
         std::vector<CellChunk*>::iterator cellChunksIterator;
         SDL_Event event;
@@ -21,6 +22,7 @@ class DocumentScene: public Scene {
         DocumentScene () {
             this->cx = 0;
             this->cy = 0;
+            this->latch = false;
 
             for (int yy = 0; yy < 4; yy++) {
                 this->cellChunks.push_back(new CellChunk(0, (yy*CELL_SIZE)*CELLCHUNK_HEIGHT));
@@ -65,6 +67,11 @@ class DocumentScene: public Scene {
                 cy += 1;
             }
 
+            if (state[SDL_SCANCODE_TAB] && latch == true) {
+                cx += 4;
+                latch = false;
+            }
+
             CellChunk *chunk;
             for (cellChunksIterator = this->cellChunks.begin() ; cellChunksIterator != this->cellChunks.end(); cellChunksIterator++) {
                 chunk = &**cellChunksIterator;
@@ -88,6 +95,7 @@ class DocumentScene: public Scene {
         }
 
         void keyUpEvent(SDL_Event e) {
+            latch = true;
         }
 
         void draw(float delta) {
