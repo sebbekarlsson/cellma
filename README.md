@@ -11,6 +11,10 @@
 > Cellma is a <b>colorful</b> <b>dictator</b>.
 > She is a <b>texteditor</b>.
 
+## Usage
+> <b>Left-ALT + W</b> to scroll up.<br>
+> <b>Left-ALT + S</b> to scroll down.
+
 ### Please note
 > Please note that this texteditor is currently just a proof of concept and
 > is not of any use at this state.

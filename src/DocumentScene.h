@@ -24,13 +24,12 @@ class DocumentScene: public Scene {
             this->cy = 0;
             this->latch = false;
 
-            for (int yy = 0; yy < 4; yy++) {
+            for (int yy = 0; yy < 100; yy++) {
                 this->cellChunks.push_back(new CellChunk(0, (yy*CELL_SIZE)*CELLCHUNK_HEIGHT));
             }
         }
 
         void tick(float delta) {
-            camera->tick(delta);
             if (state[SDL_SCANCODE_LEFT]) {
                 cx -= 1;
             }
@@ -39,23 +38,18 @@ class DocumentScene: public Scene {
             }
             if (state[SDL_SCANCODE_UP]) {
                 cy -= 1;
-
-                //if (camera->dy > -124.0f)
-                //camera->dy -= std::max(camera->y, (float)cy) - std::min(camera->y, (float)cy);
             }
             if (state[SDL_SCANCODE_DOWN]) {
                 cy += 1;
-
-                //if (camera->dy < 124.0f)
-                //camera->dy += std::max(camera->y, (float)cy) - std::min(camera->y, (float)cy);
             }
 
-            if (camera->y < (cy*CELL_SIZE)-((HEIGHT*SCALE)/2)) {
-                camera->dy += 3.5f;
+            if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_W]) {
+                camera->dy -= 32.0f;
+                latch = false;
             }
-
-            if (camera->y > (cy*CELL_SIZE)-((HEIGHT*SCALE)/2)) {
-                camera->dy -= 3.5f;
+            if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_S]) {
+                camera->dy += 32.0f;
+                latch = false;
             }
 
             if (state[SDL_SCANCODE_BACKSPACE]) {
@@ -75,9 +69,13 @@ class DocumentScene: public Scene {
             CellChunk *chunk;
             for (cellChunksIterator = this->cellChunks.begin() ; cellChunksIterator != this->cellChunks.end(); cellChunksIterator++) {
                 chunk = &**cellChunksIterator;
-                chunk->tick(delta);
+
+                chunk->isVisible = false;
+                if ((chunk->y+(CELLCHUNK_HEIGHT*CELL_SIZE)) >= camera->y && (chunk->y+(CELLCHUNK_HEIGHT*CELL_SIZE)) <= camera->y+(WIDTH*SCALE)) {
+                    chunk->tick(delta);
+                    chunk->isVisible = true;
+                }
             }
-            //this->getCurrentChunk()->tick(delta);
 
             for (int xx = 0; xx < sizeof(this->getCurrentChunk()->cells)/sizeof(*this->getCurrentChunk()->cells); xx++) {
                 for(int yy = 0; yy < sizeof(this->getCurrentChunk()->cells[xx])/sizeof(*this->getCurrentChunk()->cells[xx]); yy++) {
@@ -86,12 +84,16 @@ class DocumentScene: public Scene {
                     }
                 }
             }
+
+            camera->tick(delta);
         }
 
         void textEvent(string text) {
-            this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = text;
-            this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->writeTimer = 10.0f;
-            cx++;
+            if (latch == true) {
+                this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = text;
+                this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->writeTimer = 10.0f;
+                cx++;
+            }
         }
 
         void keyUpEvent(SDL_Event e) {
@@ -102,13 +104,15 @@ class DocumentScene: public Scene {
             CellChunk *chunk;
             for (cellChunksIterator = this->cellChunks.begin() ; cellChunksIterator != this->cellChunks.end(); cellChunksIterator++) {
                 chunk = &**cellChunksIterator;
-                chunk->draw(delta);
+
+                if (chunk->isVisible) {
+                    chunk->draw(delta);
+                }
             }
-            //this->getCurrentChunk()->draw(delta); 
         }
 
         CellChunk * getCurrentChunk() {
-            return cellChunks[(cy / CELLCHUNK_HEIGHT) % 4];
+            return cellChunks[(cy / CELLCHUNK_HEIGHT) % 100];
         }
 
         void initialize(float delta) {

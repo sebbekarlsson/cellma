@@ -5,7 +5,7 @@ class Camera: public Instance {
         float friction;
 
         Camera (float x, float y) : Instance(x, y) {
-            this->friction = 0.95f;
+            this->friction = 3.2f;
             this->dx = 0.0f;
             this->dy = 0.0f;
         }
