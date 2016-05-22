@@ -13,7 +13,8 @@
 
 ## Usage
 > <b>Left-ALT + Left-SHIFT + UP-arrow</b> to scroll up.<br>
-> <b>Left-ALT + Left-SHIFT + DOWN-arrow</b> to scroll down.
+> <b>Left-ALT + Left-SHIFT + DOWN-arrow</b> to scroll down.<br>
+> <b>Left-ALT + Left-SHIFT + RETURN</b> to toggle camera following cursor.
 
 ### Please note
 > Please note that this texteditor is currently just a proof of concept and

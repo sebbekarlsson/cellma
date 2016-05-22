@@ -20,6 +20,8 @@ class DocumentScene: public Scene {
         int cy;
         bool latch;
         bool actionState;
+        bool cameraToCursor;
+
         std::vector<CellChunk*> cellChunks;
         std::vector<CellChunk*>::iterator cellChunksIterator;
         SDL_Event event;
@@ -29,6 +31,7 @@ class DocumentScene: public Scene {
             this->cy = 0;
             this->latch = false;
             this->actionState = false;
+            this->cameraToCursor = false;
 
             for (int yy = 0; yy < 100; yy++) {
                 this->cellChunks.push_back(new CellChunk(0, (yy*CELL_SIZE)*CELLCHUNK_HEIGHT));
@@ -65,6 +68,25 @@ class DocumentScene: public Scene {
                     latch = false;
                 } else {
                     cy += 1;
+                }
+            }
+
+            if (actionState && state[SDL_SCANCODE_RETURN] && latch == true) {
+                if (cameraToCursor) {
+                    cameraToCursor = false;
+                } else {
+                    cameraToCursor = true;
+                }
+
+                latch = false;
+            }
+
+            if (cameraToCursor) {
+                if (camera->y > (cy*CELL_SIZE) - ((HEIGHT*SCALE)/2)) {
+                    camera->dy -= 5.0f;
+                }
+                if (camera->y < (cy*CELL_SIZE) - ((HEIGHT*SCALE)/2)) {
+                    camera->dy += 5.0f;
                 }
             }
 
@@ -119,7 +141,7 @@ class DocumentScene: public Scene {
         }
 
         void textEvent(string text) {
-            if (latch == true) {
+            if (latch == true && !actionState) {
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = text;
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->writeTimer = 10.0f;
                 cx++;
