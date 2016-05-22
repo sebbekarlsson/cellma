@@ -17,6 +17,7 @@
 
 
 const Uint8 *keys;
+
 int main (int argc, char* args[]) {
     keys = SDL_GetKeyboardState(NULL);
     App app;

@@ -6,6 +6,7 @@
 
 
 using namespace std;
+
 class Instance {
     public:
         float x, y;

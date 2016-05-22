@@ -1,6 +1,7 @@
 #include <GL/freeglut.h>
 #include <string>
 
+
 extern const int CELL_SIZE;
 using namespace std;
 

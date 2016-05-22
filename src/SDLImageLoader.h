@@ -4,6 +4,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
+
 class EasyImage {
     
     SDL_Surface * surface;

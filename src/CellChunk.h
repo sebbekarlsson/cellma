@@ -1,4 +1,5 @@
 extern const int CELLCHUNK_HEIGHT;
+
 class CellChunk {
     public:
         int x, y;

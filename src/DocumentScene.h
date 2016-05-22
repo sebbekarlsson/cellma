@@ -6,15 +6,20 @@
 #include <fstream>
 #include <iostream>
 
+
 extern const int CELL_SIZE;
 extern const int CELLCHUNK_HEIGHT;
+
 const Uint8 *state = SDL_GetKeyboardState(NULL);
+
 using namespace std;
+
 class DocumentScene: public Scene {
     public:
         int cx;
         int cy;
         bool latch;
+        bool actionState;
         std::vector<CellChunk*> cellChunks;
         std::vector<CellChunk*>::iterator cellChunksIterator;
         SDL_Event event;
@@ -23,6 +28,7 @@ class DocumentScene: public Scene {
             this->cx = 0;
             this->cy = 0;
             this->latch = false;
+            this->actionState = false;
 
             for (int yy = 0; yy < 100; yy++) {
                 this->cellChunks.push_back(new CellChunk(0, (yy*CELL_SIZE)*CELLCHUNK_HEIGHT));
@@ -30,26 +36,36 @@ class DocumentScene: public Scene {
         }
 
         void tick(float delta) {
+            this->actionState = false;
+
+            if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_LCTRL]) {
+                this->actionState = true;
+            }
+
             if (state[SDL_SCANCODE_LEFT]) {
                 cx -= 1;
             }
+
             if (state[SDL_SCANCODE_RIGHT]) {
                 cx += 1;
             }
+
             if (state[SDL_SCANCODE_UP]) {
-                cy -= 1;
-            }
-            if (state[SDL_SCANCODE_DOWN]) {
-                cy += 1;
+                if (actionState) {
+                    camera->dy -= 32.0f;
+                    latch = false;
+                } else {
+                    cy -= 1;
+                }
             }
 
-            if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_W]) {
-                camera->dy -= 32.0f;
-                latch = false;
-            }
-            if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_S]) {
-                camera->dy += 32.0f;
-                latch = false;
+            if (state[SDL_SCANCODE_DOWN]) {
+                if (actionState) {
+                    camera->dy += 32.0f;
+                    latch = false;
+                } else {
+                    cy += 1;
+                }
             }
 
             if (state[SDL_SCANCODE_BACKSPACE]) {
