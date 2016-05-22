@@ -99,9 +99,9 @@ class DocumentScene: public Scene {
                 cy += 1;
                 for (int xx = 0; xx < 80; xx++) {
                     if(
-                        this->getCurrentChunk()->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "" ||
-                        this->getCurrentChunk()->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == " " ||
-                        this->getCurrentChunk()->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "\n"
+                        this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "" ||
+                        this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == " " ||
+                        this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "\n"
                     ) {
                         cx = xx;
                     } else {
@@ -165,6 +165,10 @@ class DocumentScene: public Scene {
 
         CellChunk * getCurrentChunk() {
             return cellChunks[(cy / CELLCHUNK_HEIGHT) % 100];
+        }
+
+        CellChunk * getChunk(int y) {
+            return cellChunks[y];
         }
 
         void initialize(float delta) {
