@@ -30,11 +30,12 @@
 > and I might have broken every C/C++ rule there is, in this project.
 
 ### TODO
-* Document saving
-* Proper document importing (This currently works as seen in the "DocumentScene.h")
-* Line numbers
-* Commands
-* Plugin support
+* Document saving.
+* Proper document importing. (This currently works as seen in the "DocumentScene.h")
+* Better text rendering, custom fonts etc.
+* Line numbers.
+* Commands.
+* Plugin support.
 * C/C++ MAKE FILE!!
 * More awesome stuff...
 
