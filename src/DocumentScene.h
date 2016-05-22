@@ -72,9 +72,17 @@ class DocumentScene: public Scene {
                 cx -= 1;
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = "";
             }
-            if (state[SDL_SCANCODE_RETURN]) {
+            if (state[SDL_SCANCODE_RETURN] && latch == true) {
                 cx = 0;
                 cy += 1;
+                for (int xx = 0; xx < 80-1; xx++) {
+                    cx = xx+1;
+                    if(this->getCurrentChunk()->cells[xx][cy-1]->character != "") {
+                        break;
+                    }
+                }
+                if (cx > 80-2) { cx = 0; }
+                latch = false;
             }
 
             if (state[SDL_SCANCODE_TAB] && latch == true) {
