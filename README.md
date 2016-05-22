@@ -12,8 +12,8 @@
 > She is a <b>texteditor</b>.
 
 ## Usage
-> <b>Left-ALT + Left-CTRL + UP-arrow</b> to scroll up.<br>
-> <b>Left-ALT + Left-CTRL + DOWN-arrow</b> to scroll down.
+> <b>Left-ALT + Left-SHIFT + UP-arrow</b> to scroll up.<br>
+> <b>Left-ALT + Left-SHIFT + DOWN-arrow</b> to scroll down.
 
 ### Please note
 > Please note that this texteditor is currently just a proof of concept and

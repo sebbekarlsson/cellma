@@ -33,4 +33,18 @@ class CellChunk {
                 }
             }
         }
+
+        bool isLineEmpty(int line) {
+            for (int xx = 0; xx < 80; xx++) {
+                if (
+                       cells[xx][line]->character == "" ||
+                       cells[xx][line]->character == " " ||
+                       cells[xx][line]->character == "\n"
+                   ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 };

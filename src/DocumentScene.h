@@ -38,7 +38,7 @@ class DocumentScene: public Scene {
         void tick(float delta) {
             this->actionState = false;
 
-            if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_LCTRL]) {
+            if (state[SDL_SCANCODE_LALT] && state[SDL_SCANCODE_LSHIFT]) {
                 this->actionState = true;
             }
 
@@ -75,13 +75,19 @@ class DocumentScene: public Scene {
             if (state[SDL_SCANCODE_RETURN] && latch == true) {
                 cx = 0;
                 cy += 1;
-                for (int xx = 0; xx < 80-1; xx++) {
-                    cx = xx+1;
-                    if(this->getCurrentChunk()->cells[xx][cy-1]->character != "") {
+                for (int xx = 0; xx < 80; xx++) {
+                    if(
+                        this->getCurrentChunk()->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "" ||
+                        this->getCurrentChunk()->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == " " ||
+                        this->getCurrentChunk()->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "\n"
+                    ) {
+                        cx = xx;
+                    } else {
+                        cx = xx;
                         break;
                     }
                 }
-                if (cx > 80-2) { cx = 0; }
+                if (cx >= 80-1) { cx = 0; }
                 latch = false;
             }
 
