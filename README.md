@@ -33,6 +33,7 @@
 * Document saving.
 * Proper document importing. (This currently works as seen in the "DocumentScene.h")
 * Better text rendering, custom fonts etc.
+* Cursor adjustment to line above when creating a new line.
 * Line numbers.
 * Commands.
 * Plugin support.
