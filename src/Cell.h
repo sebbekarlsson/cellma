@@ -8,7 +8,7 @@ using namespace std;
 class Cell: public Instance {
     public:
         string character;
-        bool selected;
+        bool hover;
         float writeTimer;
         float text_r, text_g, text_b;
         float border_r, border_g, border_b;
@@ -92,7 +92,7 @@ class Cell: public Instance {
         }
 
         void tick(float delta) {
-            if (this->selected == true) {
+            if (this->hover == true) {
                 this->border_r = 255.0f;
                 this->border_g = 255.0f;
                 this->border_b = 255.0f;
@@ -104,6 +104,6 @@ class Cell: public Instance {
             if (this->writeTimer > 0) {
                 this->writeTimer -= 1.0f;
             }
-            this->selected = false;
+            this->hover = false;
         }
 };

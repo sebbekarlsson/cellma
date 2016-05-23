@@ -126,13 +126,21 @@ class DocumentScene: public Scene {
                 if ((chunk->y+(CELLCHUNK_HEIGHT*CELL_SIZE)) >= camera->y && (chunk->y+(CELLCHUNK_HEIGHT*CELL_SIZE)) <= camera->y+(WIDTH*SCALE)) {
                     chunk->tick(delta);
                     chunk->isVisible = true;
+                
+                    if(!chunk->initialized)
+                    {    
+                        chunk->initialize();
+                        chunk->initialized = true;
+                    }
+                } else {
+                    chunk->initialized = false;
                 }
             }
 
             for (int xx = 0; xx < sizeof(this->getCurrentChunk()->cells)/sizeof(*this->getCurrentChunk()->cells); xx++) {
                 for(int yy = 0; yy < sizeof(this->getCurrentChunk()->cells[xx])/sizeof(*this->getCurrentChunk()->cells[xx]); yy++) {
                     if (cx == xx && (cy % CELLCHUNK_HEIGHT) == yy) {
-                        this->getCurrentChunk()->cells[xx][yy]->selected = true;
+                        this->getCurrentChunk()->cells[xx][yy]->hover = true;
                     }
                 }
             }

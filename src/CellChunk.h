@@ -4,12 +4,14 @@ class CellChunk {
     public:
         int x, y;
         bool isVisible;
+        bool initialized;
         Cell* cells[80][CELLCHUNK_HEIGHT];
 
         CellChunk (int x, int y) {
             this->x = x;
             this->y = y;
             this->isVisible = false;
+            this->initialized = false;
 
             for (int xx = 0; xx < sizeof(cells)/sizeof(*cells); xx++) {
                 for(int yy = 0; yy < sizeof(cells[xx])/sizeof(*cells[xx]); yy++) {
@@ -30,6 +32,14 @@ class CellChunk {
             for (int xx = 0; xx < sizeof(cells)/sizeof(*cells); xx++) {
                 for(int yy = 0; yy < sizeof(cells[xx])/sizeof(*cells[xx]); yy++) {
                     cells[xx][yy]->draw(delta);
+                }
+            }
+        }
+
+        void initialize() {
+            for (int xx = 0; xx < sizeof(cells)/sizeof(*cells); xx++) {
+                for(int yy = 0; yy < sizeof(cells[xx])/sizeof(*cells[xx]); yy++) {
+                    cells[xx][yy]->writeTimer = (float)(rand() % 50 + 0);
                 }
             }
         }
