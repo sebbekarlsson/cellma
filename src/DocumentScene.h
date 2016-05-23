@@ -45,15 +45,15 @@ class DocumentScene: public Scene {
                 this->actionState = true;
             }
 
-            if (state[SDL_SCANCODE_LEFT]) {
+            if (state[SDL_SCANCODE_LEFT] && cx > 0) {
                 cx -= 1;
             }
 
-            if (state[SDL_SCANCODE_RIGHT]) {
+            if (state[SDL_SCANCODE_RIGHT] && cx < 80-1) {
                 cx += 1;
             }
 
-            if (state[SDL_SCANCODE_UP]) {
+            if (state[SDL_SCANCODE_UP] && cy > 0) {
                 if (actionState) {
                     camera->dy -= 32.0f;
                     latch = false;
@@ -90,7 +90,7 @@ class DocumentScene: public Scene {
                 }
             }
 
-            if (state[SDL_SCANCODE_BACKSPACE]) {
+            if (state[SDL_SCANCODE_BACKSPACE] && cx > 0) {
                 cx -= 1;
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = "";
             }
@@ -141,7 +141,7 @@ class DocumentScene: public Scene {
         }
 
         void textEvent(string text) {
-            if (latch == true && !actionState) {
+            if (latch == true && !actionState && cx < 80) {
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = text;
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->writeTimer = 10.0f;
                 cx++;
