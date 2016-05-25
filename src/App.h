@@ -3,9 +3,11 @@
 
 const int CELL_SIZE = 14;
 const int CELLCHUNK_HEIGHT = 16;
-const int WIDTH = CELL_SIZE*80;
+const int LINE_NUMBER_MARGIN = 4;
+const int WIDTH = (CELL_SIZE*(80+(LINE_NUMBER_MARGIN+1)));
 const int HEIGHT = WIDTH / 16 * 9;
 const int SCALE = 1;
+
 
 SDL_Window* display = NULL;
 SDL_Renderer* renderer = NULL;
@@ -48,7 +50,7 @@ class App {
             glMatrixMode(GL_MODELVIEW);
 
             glDisable(GL_TEXTURE_2D);
-            //glEnable(GL_DEPTH_TEST);
+            glEnable(GL_DEPTH_TEST);
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_TEXTURE_2D);

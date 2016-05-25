@@ -9,6 +9,8 @@ class Cell: public Instance {
     public:
         string character;
         bool hover;
+        bool isLineNumber;
+        bool isCountingUp;
         float writeTimer;
         float text_r, text_g, text_b;
         float border_r, border_g, border_b;
@@ -27,11 +29,14 @@ class Cell: public Instance {
             this->border_g = 40.0f;
             this->border_b = 40.0f;
 
-            this->write_r = rand() % 255 + 0;;
-            this->write_g = rand() % 255 + 0;;
-            this->write_b = rand() % 255 + 0;;
+            this->write_r = rand() % 255 + 0;
+            this->write_g = rand() % 255 + 0;
+            this->write_b = rand() % 255 + 0;
 
             this->writeTimer = 0.0f;
+
+            this->isLineNumber = false;
+            this->isCountingUp = false;
         }
 
         void draw(float delta) {
@@ -40,9 +45,6 @@ class Cell: public Instance {
             this->text_b = 255.0f;
 
             glDisable(GL_TEXTURE_2D);
-            glColor3f(border_r/255.0f, border_g/255.0f, border_b/255.0f);
-
-            glPushMatrix();
 
             if (this->writeTimer > 0) {
                 glColor3f(write_r/255.0f, write_g/255.0f, write_b/255.0f);
@@ -63,9 +65,32 @@ class Cell: public Instance {
                 text_r = (255.0 - write_r);
                 text_g = (255.0 - write_g);
                 text_b = (255.0 - write_b);
+            } else if (this->isLineNumber) {
+                glColor3f(40/255.0f, 40/255.0f, 40/255.0f);
+                glPushMatrix();
+                glTranslatef(this->x, this->y, 0.0f);
+
+                glBegin(GL_QUADS);
+
+                glVertex2f(0.0f, 0.0f);
+                glVertex2f(0.0f, this->h);
+                glVertex2f(this->w, this->h);
+                glVertex2f(this->w, 0.0f);
+                glVertex2f(0.0f, this->h);
+                
+                glEnd();
+                glPopMatrix();
+
+                text_r, border_r = (255.0 - 40);
+                text_g, border_g = (255.0 - 40);
+                text_b, border_b = (255.0 - 40);
             }
 
-            glTranslatef(this->x, this->y, -0.1f);
+        
+            glPushMatrix();
+            glTranslatef(this->x, this->y, -0.3f);
+
+            glColor3f(border_r/255.0f, border_g/255.0f, border_b/255.0f);
 
             glBegin(GL_LINES);
 
@@ -73,12 +98,11 @@ class Cell: public Instance {
             glVertex2f(this->w, this->h);
             
             glEnd();
-            
             glPopMatrix();
-
+            
             glPushMatrix();
             glColor3f(text_r/255.0f, text_g/255.0f, text_b/255.0f);
-            glTranslatef(this->x+CELL_SIZE/4, this->y+CELL_SIZE-4, 0.0f);
+            glTranslatef(this->x+CELL_SIZE/4, this->y+CELL_SIZE-4, -0.3f);
             glScalef(CELL_SIZE/186.0f, -(CELL_SIZE/186.0f), CELL_SIZE/186.0f);
 
             for (auto c = this->character.begin(); c != this->character.end(); ++c)

@@ -45,11 +45,11 @@ class DocumentScene: public Scene {
                 this->actionState = true;
             }
 
-            if (state[SDL_SCANCODE_LEFT] && cx > 0) {
+            if (state[SDL_SCANCODE_LEFT] && cx > 1) {
                 cx -= 1;
             }
 
-            if (state[SDL_SCANCODE_RIGHT] && cx < 80-1) {
+            if (state[SDL_SCANCODE_RIGHT] && cx < 81-1) {
                 cx += 1;
             }
 
@@ -90,14 +90,14 @@ class DocumentScene: public Scene {
                 }
             }
 
-            if (state[SDL_SCANCODE_BACKSPACE] && cx > 0) {
-                cx -= 1;
+            if (state[SDL_SCANCODE_BACKSPACE] && cx > 1) {
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = "";
+                cx -= 1;
             }
             if (state[SDL_SCANCODE_RETURN] && latch == true) {
-                cx = 0;
+                cx = 1;
                 cy += 1;
-                for (int xx = 0; xx < 80; xx++) {
+                for (int xx = 1; xx < 81; xx++) {
                     if(
                         this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "" ||
                         this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == " " ||
@@ -109,7 +109,7 @@ class DocumentScene: public Scene {
                         break;
                     }
                 }
-                if (cx >= 80-1) { cx = 0; }
+                if (cx >= 81-1 || cx <= 0) { cx = 1; }
                 latch = false;
             }
 
@@ -149,10 +149,13 @@ class DocumentScene: public Scene {
         }
 
         void textEvent(string text) {
-            if (latch == true && !actionState && cx < 80) {
+            if (latch == true && !actionState) {
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = text;
                 this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->writeTimer = 10.0f;
-                cx++;
+
+                if (cx < 80) {
+                    cx++;
+                }
             }
         }
 
