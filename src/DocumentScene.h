@@ -123,7 +123,7 @@ class DocumentScene: public Scene {
                 chunk = &**cellChunksIterator;
 
                 chunk->isVisible = false;
-                if ((chunk->y+(CELLCHUNK_HEIGHT*CELL_SIZE)) >= camera->y && (chunk->y+(CELLCHUNK_HEIGHT*CELL_SIZE)) <= camera->y+(WIDTH*SCALE)) {
+                if ((chunk->y+(CELLCHUNK_HEIGHT*CELL_SIZE)) >= camera->y && chunk->y <= camera->y+(HEIGHT*SCALE)) {
                     chunk->tick(delta);
                     chunk->isVisible = true;
                 
