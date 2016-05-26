@@ -58,6 +58,9 @@ class DocumentScene: public Scene {
                     camera->dy -= 32.0f;
                     latch = false;
                 } else {
+                    if (((cy-2)*CELL_SIZE) <= camera->y) {
+                        camera->dy -= ((CELL_SIZE*2)*camera->friction);
+                    }
                     cy -= 1;
                 }
             }
@@ -67,6 +70,9 @@ class DocumentScene: public Scene {
                     camera->dy += 32.0f;
                     latch = false;
                 } else {
+                    if (((cy+2)*CELL_SIZE) >= camera->y+(HEIGHT*SCALE)) {
+                        camera->dy += ((CELL_SIZE*2)*camera->friction);
+                    }
                     cy += 1;
                 }
             }
@@ -81,28 +87,28 @@ class DocumentScene: public Scene {
                 latch = false;
             }
 
-            if (cameraToCursor) {
-                if (camera->y > (cy*CELL_SIZE) - ((HEIGHT*SCALE)/2)) {
-                    camera->dy -= 5.0f;
-                }
-                if (camera->y < (cy*CELL_SIZE) - ((HEIGHT*SCALE)/2)) {
-                    camera->dy += 5.0f;
+            if (state[SDL_SCANCODE_BACKSPACE]) {
+                this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = "";
+
+                if (cx > 1) {
+                    cx -= 1;
                 }
             }
 
-            if (state[SDL_SCANCODE_BACKSPACE] && cx > 1) {
-                this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)]->character = "";
-                cx -= 1;
-            }
             if (state[SDL_SCANCODE_RETURN] && latch == true) {
                 cx = 1;
+
+                if (((cy+2)*CELL_SIZE) >= camera->y+(HEIGHT*SCALE)) {
+                    camera->dy += ((CELL_SIZE*2)*camera->friction);
+                }
+
                 cy += 1;
                 for (int xx = 1; xx < 81; xx++) {
                     if(
-                        this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "" ||
-                        this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == " " ||
-                        this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "\n"
-                    ) {
+                          this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "" ||
+                          this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == " " ||
+                          this->getChunk(((cy-1) / CELLCHUNK_HEIGHT) % 100)->cells[xx][((cy-1) % CELLCHUNK_HEIGHT)]->character == "\n"
+                      ) {
                         cx = xx;
                     } else {
                         cx = xx;
@@ -114,8 +120,10 @@ class DocumentScene: public Scene {
             }
 
             if (state[SDL_SCANCODE_TAB] && latch == true) {
-                cx += 4;
-                latch = false;
+                if (cx + 4 < 81-1) {
+                    cx += 4;
+                    latch = false;
+                }
             }
 
             CellChunk *chunk;
@@ -126,7 +134,7 @@ class DocumentScene: public Scene {
                 if ((chunk->y+(CELLCHUNK_HEIGHT*CELL_SIZE)) >= camera->y && chunk->y <= camera->y+(HEIGHT*SCALE)) {
                     chunk->tick(delta);
                     chunk->isVisible = true;
-                
+
                     if(!chunk->initialized)
                     {    
                         chunk->initialize();
@@ -142,6 +150,15 @@ class DocumentScene: public Scene {
                     if (cx == xx && (cy % CELLCHUNK_HEIGHT) == yy) {
                         this->getCurrentChunk()->cells[xx][yy]->hover = true;
                     }
+                }
+            }
+        
+            if (cameraToCursor) {
+                if (camera->y > (cy*CELL_SIZE) - ((HEIGHT*SCALE)/2)) {
+                    camera->dy -= 5.0f;
+                }
+                if (camera->y < (cy*CELL_SIZE) - ((HEIGHT*SCALE)/2)) {
+                    camera->dy += 5.0f;
                 }
             }
 
