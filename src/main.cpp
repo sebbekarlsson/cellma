@@ -1,3 +1,5 @@
+#include "RGBColor.h"
+#include "RGBColors.h"
 #include "SDLImageLoader.h"
 #include <GL/glu.h>
 #include <GL/glut.h>

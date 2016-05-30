@@ -151,6 +151,11 @@ class App {
             glTranslatef(-scene->camera->x, -scene->camera->y, 0.0f);
             scene->draw(delta);
             glPopMatrix();
+
+            glPushMatrix();
+            glTranslatef(0.0f, 0.0f, -0.4f);
+            scene->drawGUI(delta);
+            glPopMatrix();
             
             //glPushMatrix();
             //scene->camera->draw(delta);
