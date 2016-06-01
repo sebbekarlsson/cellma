@@ -6,16 +6,15 @@ CommandParser::CommandParser() {
 }
 
 bool CommandParser::parse(string command) {
-    std::stringstream test(command);
-    std::string segment;
-    std::vector<std::string> args;
+    std::stringstream cmd(command);
 
-    while(std::getline(test, segment, ' '))
+    while(std::getline(cmd, this->segment, ' '))
     {
-        args.push_back(segment);
+        this->args.push_back(this->segment);
         cout << segment << endl;
     } 
 
     this->lastCommand = command;
+   
     return true;
 }
