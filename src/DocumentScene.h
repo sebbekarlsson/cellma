@@ -1,3 +1,4 @@
+#include "CommandParser.h"
 #include "Scene.h"
 #include "Cell.h"
 #include "CellChunk.h"
@@ -23,6 +24,7 @@ class DocumentScene: public Scene {
         bool actionState;
         bool cameraToCursor;
         bool commandState;
+        CommandParser * commandParser;
 
         std::vector<CellChunk*> cellChunks;
         std::vector<CellChunk*>::iterator cellChunksIterator;
@@ -34,7 +36,8 @@ class DocumentScene: public Scene {
             this->latch = false;
             this->actionState = false;
             this->cameraToCursor = false;
-            this->commandState = true;
+            this->commandState = false;
+            this->commandParser = new CommandParser();
 
             for (int yy = 0; yy < 100; yy++) {
                 this->cellChunks.push_back(new CellChunk(0, (yy*CELL_SIZE)*CELLCHUNK_HEIGHT));
@@ -96,14 +99,37 @@ class DocumentScene: public Scene {
                 }
             }
 
-            if (actionState && state[SDL_SCANCODE_RETURN] && latch == true && !commandState) {
-                if (cameraToCursor) {
-                    cameraToCursor = false;
-                } else {
-                    cameraToCursor = true;
+            if (actionState && !commandState) {
+                if (this->getCurrentCell()->isNumeric()) {
+                    int number = std::stoi(this->getCurrentCell()->character);
+
+                    if (state[SDL_SCANCODE_PAGEUP] && latch == true) {
+                        if (number < 9) {
+                            number += 1;
+                        } else {
+                            number = 0;
+                        }
+                        this->getCurrentCell()->character = std::to_string(number);
+                        latch = false;
+                    } else if (state[SDL_SCANCODE_PAGEDOWN] && latch == true) {
+                        if (number > 0) {
+                            number -= 1;
+                        } else {
+                            number = 9;
+                        }
+                        this->getCurrentCell()->character = std::to_string(number);
+                        latch = false;
+                    }
                 }
 
-                latch = false;
+                if (state[SDL_SCANCODE_RETURN] && latch == true) {
+                    if (cameraToCursor) {
+                        cameraToCursor = false;
+                    } else {
+                        cameraToCursor = true;
+                    }
+                    latch = false;
+                }
             }
 
             if (state[SDL_SCANCODE_BACKSPACE] && !commandState) {
@@ -115,7 +141,6 @@ class DocumentScene: public Scene {
             }
 
             if (state[SDL_SCANCODE_RETURN] && latch == true) {
-
                 if (!commandState) {
                     cx = 1;
 
@@ -138,6 +163,7 @@ class DocumentScene: public Scene {
                     }
                     if (cx >= 81-1 || cx <= 0) { cx = 1; }
                 } else {
+                    this->commandParser->parse(this->command);
                     this->command = "";
                 }
                 latch = false;
@@ -258,6 +284,10 @@ class DocumentScene: public Scene {
 
         CellChunk * getChunk(int y) {
             return cellChunks[y];
+        }
+
+        Cell * getCurrentCell() {
+            return this->getCurrentChunk()->cells[cx][(cy % CELLCHUNK_HEIGHT)];
         }
 
         void initialize(float delta) {

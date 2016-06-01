@@ -1,4 +1,7 @@
 #include <string>
+#include <iostream>
+
+
 #ifndef COMMANDPARSER_H
 #define COMMANDPARSER_H
 
@@ -8,7 +11,7 @@ class CommandParser {
     public:
         string lastCommand;
         CommandParser();
-        bool Parse(string command);
+        bool parse(string command);
 };
 
 #endif
